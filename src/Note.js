@@ -19,9 +19,6 @@ export default class Note extends React.Component {
                     {noteData.body}
                 </div>
                 <div className="note-action-bar">
-                    <button className="note-button">
-                        Edit
-            </button>
                     <button 
                     className="note-button"
                     onClick={this.handleSubmit}>

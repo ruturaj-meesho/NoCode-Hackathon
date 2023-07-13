@@ -5,6 +5,7 @@ from flask import jsonify, request
 from flask_login import logout_user
 from app import app, db
 from app.models import User, Note
+import requests
 
 @app.route('/time')
 def get_current_time():
@@ -55,6 +56,31 @@ def delete_note_by_id(note_id):
     db.session.commit()
     return make_response({},204)
 
+@app.route('/nocode/question', methods=['POST'])
+def post_question():
+    if not request.json:
+        abort(400)
+    print(request.json)
+    question = request.json['question']
+    print(question)
+    payload = {
+    'statement': question
+    }
+    Headers = { 'Content-Type' : 'application/json'}
+    print(payload)
+    url_post = "http://172.31.40.186:8080/question"
+    post_response = requests.post(url_post, json=payload, headers=Headers)
+    print(post_response.json())
+    #post_response_json = post_response.json()
+    #print(post_response_json)
+    user = User.query.filter(User.username=='ruturaj').first()
+    result_body = construct_result_summary(post_response.json())
+    note = Note(body=result_body, author=user)
+    db.session.add(note)
+    db.session.commit()
+    return construct_response(post_response.json())
+    # return make_response({},204)
+
 @app.route('/journal/logout')
 def logout():
     logout_user()
@@ -90,3 +116,12 @@ def convert_to_dict(row):
         return d
 
 
+def construct_result_summary(json_response) :
+    # result = ""
+    # result += 'Query : '
+    # result += json_response['query']
+    # result += '\nQuery result : '
+    # result += json_response['query_result']
+    # result += '\nResult description : '
+    # result += json_response['query_result_description']
+    return json.dumps(json_response)

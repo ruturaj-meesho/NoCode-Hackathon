@@ -21,11 +21,12 @@ export default class NotesLoader extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ body: noteBody })
+            body: JSON.stringify({ question: noteBody })
         };
-        fetch('/journal/api/notes', requestOptions).then(res => {if (res.status===204) {
-            this.getAllNotes();
-        }})
+        fetch('/nocode/question', requestOptions).then(res => res.json()).then(
+            data => {
+            this.getAllNotes()
+            });
       }
     
     handleNoteDelete(index) {
@@ -41,7 +42,14 @@ export default class NotesLoader extends React.Component {
     getAllNotes() {
         fetch('/journal/api/notes').then(res => res.json()).then(
             data => {
-              this.setState({notesData: data});
+                console.log("logging data below")
+                var arrayLength = data.length;
+                for (var i = 0; i < arrayLength; i++) {
+                    console.log(data[i]);
+                    console.log(data[i]['body']) 
+                    //Do something
+                }
+                this.setState({notesData: data});
             });
     }
 

@@ -6,8 +6,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "plotly.js": "^2.24.3",
+    "plotly.js-dist": "^2.24.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-plotlyjs": "^0.4.4",
     "react-scripts": "3.4.1"
   },
   "scripts": {
