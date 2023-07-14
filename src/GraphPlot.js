@@ -16,7 +16,7 @@ export default class GraphPlot extends React.Component {
         this.setState({plotData: [
             {
               type: 'scatter',  // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
-              x: [1, 2, 3],     // more about "x": #scatter-x
+              x: ['a', 'b', 'c'],     // more about "x": #scatter-x
               y: [6, 2, 3],     // #scatter-y
               marker: {         // marker is an object, valid marker keys: #scatter-marker
                 color: 'rgb(16, 32, 77)' // more about "marker.color": #scatter-marker-color
@@ -24,7 +24,7 @@ export default class GraphPlot extends React.Component {
             },
             {
               type: 'bar',      // all "bar" chart attributes: #bar
-              x: [1, 2, 3],     // more about "x": #bar-x
+              x: ['a', 'b', 'c'],     // more about "x": #bar-x
               y: [6, 2, 3],     // #bar-y
               name: 'bar chart example' // #bar-name
             }
@@ -37,7 +37,8 @@ export default class GraphPlot extends React.Component {
         let layout = {                     // all "layout" attributes: #layout
             title: 'simple example',  // more about "layout.title": #layout-title
             xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
-              title: 'time'         // more about "layout.xaxis.title": #layout-xaxis-title
+              title: 'time',         // more about "layout.xaxis.title": #layout-xaxis-title
+              type: 'category'
             },
             annotations: [            // all "annotation" attributes: #layout-annotations
               {
