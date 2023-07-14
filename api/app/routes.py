@@ -123,7 +123,7 @@ def construct_result_summary(json_response) :
     d = []
     query_result = json_response['query_result']
     result_description = json_response['query_result_description']
-    result_list = query_result[0:len(query_result)-1]
+    result_list = query_result[1:len(query_result)-1]
 
 
     curly_subs = getSubstringBetweenTwoChars('{','}',result_description)
