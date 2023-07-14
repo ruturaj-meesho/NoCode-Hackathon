@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Note from './Note'
 import NoteCreator from './NoteCreator'
 import './notesLoader.css';
 
+import ReactTable from "react-table-6";  
+import "react-table-6/react-table.css" 
+
+import { Table } from 'antd';
+import TableComponent from './table';
+import GraphPlot from './GraphPlot';
+
+
+
 export default class NotesLoader extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {notesData: []};
+        this.state = {dataSource: []};
         this.handleNoteSubmit = this.handleNoteSubmit.bind(this);
         this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
         this.handleNoteDelete = this.handleNoteDelete.bind(this);
     }
+
+    
 
     forceUpdateHandler(){
         console.log("In force update");
@@ -25,7 +36,10 @@ export default class NotesLoader extends React.Component {
         };
         fetch('/nocode/question', requestOptions).then(res => res.json()).then(
             data => {
-            this.getAllNotes()
+                console.log('logging proper no code response')
+                console.log(data)
+                // this.getAllNotes()
+                this.setState({dataSource: data});
             });
       }
     
@@ -49,7 +63,7 @@ export default class NotesLoader extends React.Component {
                     console.log(data[i]['body']) 
                     //Do something
                 }
-                this.setState({notesData: data});
+                this.setState({dataSource: data});
             });
     }
 
@@ -58,7 +72,455 @@ export default class NotesLoader extends React.Component {
     }
 
     render() {
-        const notesData = this.state.notesData;
+
+        // const dataSource = [
+        //     {
+        //       key: '1',
+        //       name: 'Ruturaj Apte',
+        //       age: 32,
+        //       address: 'New York Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '1',
+        //       name: 'John Brown',
+        //       age: 32,
+        //       address: 'New York Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //     {
+        //       key: '2',
+        //       name: 'Jim Green',
+        //       age: 40,
+        //       address: 'London Park',
+        //     },
+        //   ];
+        
+        const notesData = this.state.dataSource;
         const notesList = [];
         for (var i = 0; i < notesData.length; i++) {
             notesList.push(<Note 
@@ -70,8 +532,12 @@ export default class NotesLoader extends React.Component {
             <div className="timeline-container">
             <NoteCreator
             onNoteSubmit={this.handleNoteSubmit}/>
-            <div className="loader-container">
+            {/* <div className="loader-container">
                 {notesList}
+            </div> */}
+            <TableComponent dataSource={this.state.dataSource}/>
+            <div>
+                <GraphPlot/>
             </div>
             </div>
         )

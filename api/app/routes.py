@@ -6,6 +6,7 @@ from flask_login import logout_user
 from app import app, db
 from app.models import User, Note
 import requests
+import re
 
 @app.route('/time')
 def get_current_time():
@@ -75,10 +76,12 @@ def post_question():
     #print(post_response_json)
     user = User.query.filter(User.username=='ruturaj').first()
     result_body = construct_result_summary(post_response.json())
-    note = Note(body=result_body, author=user)
-    db.session.add(note)
-    db.session.commit()
-    return construct_response(post_response.json())
+    
+    # note = Note(body=result_body, author=user)
+    # db.session.add(note)
+    # db.session.commit()
+
+    return result_body
     # return make_response({},204)
 
 @app.route('/journal/logout')
@@ -117,6 +120,81 @@ def convert_to_dict(row):
 
 
 def construct_result_summary(json_response) :
+    d = []
+    query_result = json_response['query_result']
+    result_description = json_response['query_result_description']
+    result_list = query_result[0:len(query_result)-1]
+
+
+    curly_subs = getSubstringBetweenTwoChars('{','}',result_description)
+    # col_list = curly_subs.split(',')
+    col_list = [x.strip() for x in curly_subs.split(',')]
+
+
+
+    res = re.split(r',\s*(?![^()]*\))', result_list)
+ 
+    dims = []
+    # printing result
+    sublist = []
+    for (i,s) in enumerate(res):
+        sub = re.split(r',\s*(?![^()]*\))', s[1:len(s)-1])
+        sublist.append(sub)
+    
+    print(sublist)
+    # print(d)
+    
+    k = 0
+    dic = {}
+    for (j, ele) in enumerate(sublist):
+      dic[col_list[k]] = ele[0]
+      k += 1
+      if (k == len(col_list)):
+        k = 0
+        d.append(dic)
+        dic = {}
+    
+    print ('------')
+    print(d)
+    #return d
+    return json.dumps(d)
+
+def getSubstringBetweenTwoChars(ch1,ch2,s):
+      return s[s.find(ch1)+1:s.find(ch2)]
+
+# def processCellElement(String cell):
+
+
+
+# def construct_result_summary(json_response) :
+#     d = []
+#     query_result = json_response['query_result']
+#     result_description = json_response['query_result_description']
+#     result_list = query_result[1:len(query_result)-1]
+
+
+#     curly_subs = getSubstringBetweenTwoChars('{','}',result_description)
+#     col_list = curly_subs.split(',')
+
+
+
+#     res = re.split(r',\s*(?![^()]*\))', result_list)
+ 
+#     dims = []
+#     # printing result
+#     for s in res:
+#         sub = re.split(r',\s*(?![^()]*\))', s[1:len(s)-1])
+#         dic = {}
+#         for (i,su) in enumerate(sub):
+#             dic[col_list[i]] = su
+#         d.append(dic)
+    
+#     return d 
+
+# def getSubstringBetweenTwoChars(ch1,ch2,s):
+#     return s[s.find(ch1)+1:s.find(ch2)]
+
+
     # result = ""
     # result += 'Query : '
     # result += json_response['query']
@@ -124,4 +202,4 @@ def construct_result_summary(json_response) :
     # result += json_response['query_result']
     # result += '\nResult description : '
     # result += json_response['query_result_description']
-    return json.dumps(json_response)
+    

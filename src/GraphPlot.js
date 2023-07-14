@@ -1,35 +1,19 @@
-import React from 'react';
-import './noteCreator.css';
+import React, { useRef } from 'react';
 import createPlotlyComponent from 'react-plotlyjs';
 //See the list of possible plotly bundles at https://github.com/plotly/plotly.js/blob/master/dist/README.md#partial-bundles or roll your own
 import Plotly from 'plotly.js/dist/plotly-cartesian';
 
+export default class GraphPlot extends React.Component {
 
 
-
-
- 
-
-export default class NoteCreator extends React.Component {
     constructor(props) {
-        super(props);
-        this.state = {value: ''};
+        super((props));
+        this.state = {plotData: []};
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-    
-    handleSubmit(event) {
-        this.props.onNoteSubmit(this.state.value);
-        this.setState({value: ''})
-    }
-    
-    render() {
-        let data = [
+    componentDidMount() {
+        this.setState({plotData: [
             {
               type: 'scatter',  // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
               x: [1, 2, 3],     // more about "x": #scatter-x
@@ -44,8 +28,13 @@ export default class NoteCreator extends React.Component {
               y: [6, 2, 3],     // #bar-y
               name: 'bar chart example' // #bar-name
             }
-          ];
-          let layout = {                     // all "layout" attributes: #layout
+          ]});
+    }
+
+    render() {
+        const PlotlyComponent = createPlotlyComponent(Plotly);
+
+        let layout = {                     // all "layout" attributes: #layout
             title: 'simple example',  // more about "layout.title": #layout-title
             xaxis: {                  // all "layout.xaxis" attributes: #layout-xaxis
               title: 'time'         // more about "layout.xaxis.title": #layout-xaxis-title
@@ -60,28 +49,19 @@ export default class NoteCreator extends React.Component {
               }
             ]
           };
+    
           let config = {
             showLink: false,
             displayModeBar: true
-          };
-        return (
-            <div className='creator-container'>
-                <textarea 
-                placeholder="Enter your prompt here and click submit"
-                value={this.state.value}
-                onChange={this.handleChange} 
-                className='textarea-style' />
-                <div>
-                    <button 
-                    onClick={this.handleSubmit}
-                    className='creator-action-bar'>
-                        Submit
-                    </button>
-                </div>
-                
+          };     
+
+          return (
+            <div>
+                <PlotlyComponent className="whatever" data={this.state.plotData} layout={layout} config={config}/>
             </div>
-            
-            
-        )
+          )
+          
     }
+
+
 }

@@ -1,7 +1,7 @@
 .timeline-container {
     display: flex;
-    background-color: #282c34;
+    background-color: #e6e9f0;
     flex-direction: column;
-    width: 30%;
+    width: 80%;
   }
 

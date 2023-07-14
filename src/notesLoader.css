@@ -1,5 +1,20 @@
 .loader-container {
     display: flex;
-    background-color: #282c34;
+    background-color: #e5e9f0;
     flex-direction: column;
+  }
+
+
+  .scrollView {
+    /* width: 300px; */
+    height: 500px;
+    overflow-x: auto;
+  }
+
+
+  .table-container {
+    background-color: white;
+    padding: 10px;
+    margin: 20px;
+    height: 100px;
   }
