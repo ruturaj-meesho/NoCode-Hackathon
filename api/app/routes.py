@@ -63,6 +63,7 @@ def post_question():
         abort(400)
     print(request.json)
     question = request.json['question']
+    question += ". in the output also provide a list of column names enclosed in curly braces"
     print(question)
     payload = {
     'statement': question
@@ -119,7 +120,11 @@ def convert_to_dict(row):
         return d
 
 
+
+
 def construct_result_summary(json_response) :
+
+
     d = []
     query_result = json_response['query_result']
     result_description = json_response['query_result_description']
@@ -133,6 +138,8 @@ def construct_result_summary(json_response) :
 
 
     res = re.split(r',\s*(?![^()]*\))', result_list)
+    print ("printing res")
+    print (res)
  
     dims = []
     # printing result
@@ -141,23 +148,45 @@ def construct_result_summary(json_response) :
         sub = re.split(r',\s*(?![^()]*\))', s[1:len(s)-1])
         sublist.append(sub)
     
+    print("printing sublist")
     print(sublist)
     # print(d)
     
     k = 0
     dic = {}
     for (j, ele) in enumerate(sublist):
-      dic[col_list[k]] = ele[0]
-      k += 1
-      if (k == len(col_list)):
-        k = 0
-        d.append(dic)
-        dic = {}
+      for e in ele:
+        print("ele is")
+        print(ele)
+        if ("atetime" in e):
+            dic[col_list[k]] = dt_parse(e)
+        else:
+            dic[col_list[k]] = e
+        k += 1
+        if (k == len(col_list)):
+            k = 0
+            d.append(dic)
+            dic = {}
+      
+
     
     print ('------')
     print(d)
     #return d
     return json.dumps(d)
+
+def dt_parse(item):
+    temp = ""
+    i = 0
+    while i < len(item):
+        if (item[i].isdigit() or item[i] == ' ' or item[i] == '-'):
+            temp = temp + item[i]
+        i = i + 1
+
+    temp = temp.strip().replace(" ", "-")
+    splitted = temp.split('-')
+    temp = '-'.join(splitted[:3])
+    return temp
 
 def getSubstringBetweenTwoChars(ch1,ch2,s):
       return s[s.find(ch1)+1:s.find(ch2)]
