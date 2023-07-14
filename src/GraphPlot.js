@@ -8,31 +8,71 @@ export default class GraphPlot extends React.Component {
 
     constructor(props) {
         super((props));
-        this.state = {plotData: []};
+        // this.state = {plotData: []};
 
     }
 
+    // componentWillReceiveProps(nextProps) {
+    //     this.setState({plotData: [
+    //         {
+    //           type: 'scatter',  // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
+    //           x: this.props.scatterx,     // more about "x": #scatter-x
+    //           y: this.props.scattery,     // #scatter-y
+    //           marker: {         // marker is an object, valid marker keys: #scatter-marker
+    //             color: 'rgb(16, 32, 77)' // more about "marker.color": #scatter-marker-color
+    //           }
+    //         },
+    //         {
+    //           type: 'bar',      // all "bar" chart attributes: #bar
+    //           x: this.props.barx,     // more about "x": #bar-x
+    //           y: this.props.bary,     // #bar-y
+    //           name: 'bar chart example' // #bar-name
+    //         }
+    //       ]});
+    //   }
+
     componentDidMount() {
-        this.setState({plotData: [
+        console.log('x data')
+        console.log(this.props.scatterx)
+        console.log('y data')
+        console.log(this.props.scattery)
+        // this.setState({plotData: [
+        //     {
+        //       type: 'scatter',  // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
+        //       x: this.props.scatterx,     // more about "x": #scatter-x
+        //       y: this.props.scattery,     // #scatter-y
+        //       marker: {         // marker is an object, valid marker keys: #scatter-marker
+        //         color: 'rgb(16, 32, 77)' // more about "marker.color": #scatter-marker-color
+        //       }
+        //     },
+        //     {
+        //       type: 'bar',      // all "bar" chart attributes: #bar
+        //       x: this.props.barx,     // more about "x": #bar-x
+        //       y: this.props.bary,     // #bar-y
+        //       name: 'bar chart example' // #bar-name
+        //     }
+        //   ]});
+    }
+
+    render() {
+        const PlotlyComponent = createPlotlyComponent(Plotly);
+
+        let plotData = [
             {
               type: 'scatter',  // all "scatter" attributes: https://plot.ly/javascript/reference/#scatter
-              x: ['a', 'b', 'c'],     // more about "x": #scatter-x
-              y: [6, 2, 3],     // #scatter-y
+              x: this.props.scatterx,     // more about "x": #scatter-x
+              y: this.props.scattery,     // #scatter-y
               marker: {         // marker is an object, valid marker keys: #scatter-marker
                 color: 'rgb(16, 32, 77)' // more about "marker.color": #scatter-marker-color
               }
             },
             {
               type: 'bar',      // all "bar" chart attributes: #bar
-              x: ['a', 'b', 'c'],     // more about "x": #bar-x
-              y: [6, 2, 3],     // #bar-y
+              x: this.props.barx,     // more about "x": #bar-x
+              y: this.props.bary,     // #bar-y
               name: 'bar chart example' // #bar-name
             }
-          ]});
-    }
-
-    render() {
-        const PlotlyComponent = createPlotlyComponent(Plotly);
+          ];
 
         let layout = {                     // all "layout" attributes: #layout
             title: 'simple example',  // more about "layout.title": #layout-title
@@ -58,7 +98,7 @@ export default class GraphPlot extends React.Component {
 
           return (
             <div>
-                <PlotlyComponent className="whatever" data={this.state.plotData} layout={layout} config={config}/>
+                <PlotlyComponent className="whatever" data={plotData} layout={layout} config={config}/>
             </div>
           )
           

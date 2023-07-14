@@ -9,13 +9,14 @@ import "react-table-6/react-table.css"
 import { Table } from 'antd';
 import TableComponent from './table';
 import GraphPlot from './GraphPlot';
+import PlotFunc from './PlotFunc';
 
 
 
 export default class NotesLoader extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {dataSource: [], colList: []};
+        this.state = {dataSource: [], colList: [], xList: [], yList: []};
         this.handleNoteSubmit = this.handleNoteSubmit.bind(this);
         this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
         this.handleNoteDelete = this.handleNoteDelete.bind(this);
@@ -50,7 +51,27 @@ export default class NotesLoader extends React.Component {
                     col["key"] = key
                     clist.push(col)
                 }
-                this.setState({dataSource: data, colList: clist});
+                
+                var xlabels = []
+                var ylabels = [] 
+                for (let i = 0; i < data.length; i++) {
+                    var element = data[i]
+                    for (const [key, value] of Object.entries(element)) {
+                        console.log(`${key}: ${value}`);
+                        if (value.includes("atetime")) {
+                            xlabels.push(value)
+                        }
+                        else {
+                            ylabels.push(parseInt(value))
+                        }
+                      }
+                }
+                console.log('x label')
+                console.log(xlabels)
+                console.log('y label')
+                console.log(ylabels)
+                this.setState({dataSource: data, colList: clist, xList: xlabels, yList: ylabels});
+                
             });
       }
     
@@ -102,8 +123,11 @@ export default class NotesLoader extends React.Component {
                 {notesList}
             </div> */}
             <TableComponent dataSource={this.state.dataSource} colList={this.state.colList}/>
+            {/* <div>
+                <GraphPlot scatterx={this.state.xList} scattery={this.state.yList}/>
+            </div> */}
             <div>
-                <GraphPlot/>
+                <PlotFunc scatterx={this.state.xList} scattery={this.state.yList}/>
             </div>
             </div>
         )
